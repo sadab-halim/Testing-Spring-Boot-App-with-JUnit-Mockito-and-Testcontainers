@@ -47,8 +47,64 @@
 - Then, in the case of test failures, it'll be easier to determine which specific scenario failed and, likewise, simpler to fix the code.
 - Therefore, always write a unit test to test a single specific scenario.
 
+## Understanding Spring Boot Starter Test Dependency
+- The Spring Boot Starter Test dependency is a primary dependency for testing the Spring Boot Applications.
+- It holds all the necessary elements required for the testing.
+- This starter includes:
+  - Spring Specific Dependencies
+  - Dependencies for Auto-Configuration
+  - Set of Testing Libraries - JUnit, Mockito, Hamcrest, AssertJ, JSONassert, and JsonPath
+- When we use this starter, we don't need to update the versions of all the dependencies (JUnit, Mockito, Hamcrest, AssertJ, JSONassert, and JsonPath) manually.
+- The Spring Boot parent POM handles all dependency versions, and the Spring Boot team ensures the different testing dependencies work properly together.
 
 # Unit Testing Repository Layer
+- We don't use Mockito for Repository Layer as it not dependent to any layer, it's directly connected to the database.
+
+## Repository Testing
+- Overview of @DataJpaTest annotation
+- Unit Test for Save Employee Operation
+- Unit Test for Get All Employees Operation
+- Unit Test for Get Employee by Id Operation
+- Unit Test for Get Employee by Email Operation (Custom Query)
+- Unit Test for Update Employee Operation
+- Unit Test for Delete Employee Operation
+- Unit Test for Custom Query using JPQL with Index Parameters (using @Query annotation)
+- Unit Test for Custom Query using JPQL with Named Parameters (using @Query annotation)
+- Unit Test for Custom Native Query with Index Parameters (using @Query annotation)
+- Unit Test for Custom Native Query with Named Parameters (using @Query annotation)
+- Refactoring JUnit Tests to Use @BeforeEach annotation
+
+### JUnit Tests in BDD Style
+#### Syntax
+```java
+@Test
+public void given_when_then() {
+    //given - precondition or setup
+    //when - action or the behavior we're testing
+    //then - verify the output
+}
+```
+
+#### Example
+```java
+@Test
+public void givenEmployeeObj_whenSave_thenReturnSavedEmployee() {   
+    //given - precondition or setup
+  Employee employee = Employee.builder()
+          .firstName("Ramesh")
+          .lastName("Ramesh")
+          .email("ramesh@gmail.com")
+          .build();
+  
+    //when - action or the behavior we're testing
+    Employee savedEmployee = employeeRepository.save(employee);
+    
+    //then - verify the output
+    assertThat(savedEmployee).isNotNull();
+    assertThat(savedEmployee.getId()).isGreaterThan(0);
+}
+```
+
 # Unit Testing Service Layer
 # Unit Testing Controller Layer (Unit Testing of REST APIs)
 # Integration Testing using Local MySQL Database
